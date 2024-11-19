@@ -1,65 +1,29 @@
 const express = require('express');
-const application = express();
+const application = express.Router();
+const productRouter = require('../modules/product/product.router')
 
-const checkLoggedIn = (req,res,next)=>{
-    // console.log('checking if user is logged in');
-    next({code:"unauthorized",message:"user is not logged in",status:401});
-}
 
-application.get('home',(request,response)=>{
-    response.status(200).json({
-        data:null,
-        message:'home route',
-        code: "sucess",
-        options: null
-    })
-}); 
+// Middleware to check if the user is logged in
 
-application.get('/user',(request,response)=>{
+
+// Routes
+application.get('/health', (request, response) => {
     response.status(200).json({
-        data:null,
-        message:'user route',
-        code: "sucess",
+        data: null,
+        message: 'health route',
+        code: "success",
         options: null
-    })
-});
-application.post('/about-us',(request,response)=>{
-    response.status(200).json({
-        data:null,
-        message:'about-us route',
-        code: "sucess",
-        options: null
-    })
+    });
 });
 
-//product crude 
-
-
-application.post('/product',checkLoggedIn,(request,response,next)=>{
-   //login check
-   //handle product create 
+application.use(productRouter);
+// Error handling middleware
+application.use((err, req, res, next) => {
+    const status = err.status || 500;
+    res.status(status).json({
+        code: err.code || "error",
+        message: err.message || "Something went wrong",
+    });
 });
 
-application.get('/product',(request,response)=>{
-    //handling
-    //returning all the product lists  
- });
-
-application.get('/product/:id',(request,response)=>{
-    //handling
-    //returning the product details 
- });
-
- application.patch('/product/:id',checkLoggedIn,(request,response,next)=>{
-    //handling
-    //update the product details 
- });
-
- application.delete('/product/:id',checkLoggedIn,(request,response)=>{
-    //handling
-    //delete the product details 
- });
-
-
-
-module.exports= application;
+module.exports = application;
