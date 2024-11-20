@@ -3,7 +3,6 @@ const application = express.Router();
 const productRouter = require('../modules/product/product.router')
 
 
-// Middleware to check if the user is logged in
 
 
 // Routes

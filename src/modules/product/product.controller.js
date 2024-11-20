@@ -1,13 +1,30 @@
 class ProductController {
-     getAllProducts =(request, response) => {
+     getProductDetails =(request, response,next) => {
         response.status(200).json({
             data: null,
-            message: 'Product details',
+            message: '1 Product details',
             code: "success"
         })
         };
+
+        getAllProducts = (request, response,next) => {
+            response.status(200).json({
+                data: null,
+                message: 'All Products',
+                code: "success"
+            })
+        };
+        addProduct = (request, response,next) => {
+
+            const data = request.body || null;
+            response.status(200).json({
+                data: {data},
+                message: 'Product added',
+                code: "success"
+            })  
+        }
     
-         updateProductById = (request, response) => {
+         updateProductById = (request, response,next) => {
             response.status(200).json({
                 data: null,
                 message: 'Product updated',
@@ -15,7 +32,7 @@ class ProductController {
             })
             };
     
-         deleteProductById = (request, response) => {
+         deleteProductById = (request, response,next) => {
             response.status(200).json({
                 data: null,
                 message: 'Product deleted',

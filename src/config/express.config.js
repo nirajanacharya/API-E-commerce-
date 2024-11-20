@@ -4,7 +4,7 @@ const router = require('../router/router'); // Loading the router
 // Create an instance of the Express application
 const application = express();
 
-// Middleware for parsing JSON
+// // Middleware for parsing JSON
 application.use(express.json());
 
 // Use the router
