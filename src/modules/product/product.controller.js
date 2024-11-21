@@ -15,13 +15,16 @@ class ProductController {
             })
         };
         addProduct = (request, response,next) => {
-
             const data = request.body || null;
+            // const file = request.file || null;
+            const files = request.files || null;    
             response.status(200).json({
-                data: {data},
+                data: {data,files},
                 message: 'Product added',
                 code: "success"
-            })  
+            })
+            
+          
         }
     
          updateProductById = (request, response,next) => {
