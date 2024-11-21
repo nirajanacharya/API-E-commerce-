@@ -7,7 +7,7 @@ const{uploader} = require('../../middleware/multipart.middleware');
 
 productRouter.route('/product')
     .get(prodCtrl.getAllProducts)
-    .post(checkLoggedIn,uploader().array('image'),prodCtrl.addProduct);
+    .post(checkLoggedIn,uploader().single('image'),prodCtrl.addProduct);
     
 productRouter.route('/product/:id')
     .get(prodCtrl.getProductDetails)
