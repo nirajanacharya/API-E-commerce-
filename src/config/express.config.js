@@ -6,7 +6,10 @@ const application = express();
 
 // // Middleware for parsing JSON
 application.use(express.json());
-
+// application.use(urlencoded({ 
+//     extended: false
+//  }));
+ 
 // Use the router
 application.use(router);
 
