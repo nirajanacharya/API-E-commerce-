@@ -1,7 +1,7 @@
 const express = require('express');
 const application = express.Router();
 const productRouter = require('../modules/product/product.router')
-
+const authRouter= require('../../src/modules/auth/auth.Router')
 
 
 
@@ -15,7 +15,10 @@ application.get('/health', (request, response) => {
     });
 });
 
-application.use(productRouter);
+application.use('/product',productRouter);
+
+//for auth routes 
+application.use('/auth',authRouter);
 // Error handling middleware
 application.use((err, req, res, next) => {
     const status = err.status || 500;
