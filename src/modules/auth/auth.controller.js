@@ -1,16 +1,14 @@
-const cloudinarySvc= require('../../services/cloudinary.service')
 
+const authService = require ('./auth.service');
 class AuthController {
 
-    register = (req,res,next)=>
+    register =async (req,res,next)=>
         {
         
         try {
-            let data = req.body;
-            if(req.file){
-                data.image =cloudinarySvc.uploadImage('req.file.path','users');
 
-            }
+            let data = await authService.transformUserCreateData (req);
+
             res.status(201).json({
                 data:{data},
                 message: 'User registered successfully',
