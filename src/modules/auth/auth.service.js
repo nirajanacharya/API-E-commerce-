@@ -1,6 +1,7 @@
 const cloudinarySvc = require("../../services/cloudinary.service");
 const {generateRandomString , generateMinutes } = require("../../Utilities/helper");
 const bcrypt = require("bcryptjs");
+const UserModel = require('../User/user.model');
 
 class AuthService {
     generateOtp = () => {
@@ -12,7 +13,7 @@ class AuthService {
 
     transformUserCreateData = async (req) => {
         try {
-            let data = req.body;
+            let data  = req.body;
 
             if (req.file) {
                 data.image = await cloudinarySvc.uploadImage(req.file.path, '/users');
@@ -32,7 +33,18 @@ class AuthService {
             throw exception;
         }
     }
+
+    createUser = async (data) => {
+        try {
+            const userObj = new UserModel(data);
+            const user =  await userObj.save();
+            return user;
+        } catch (exception) {
+            throw exception;
+        }
+    }
 }
+
 
 const authService = new AuthService();
 module.exports = authService;   

@@ -1,6 +1,9 @@
 const express = require('express');
 const router = require('../router/router'); // Loading the router
 
+//database connection
+require('./db.config')
+
 // Create an instance of the Express application
 const application = express();
 
