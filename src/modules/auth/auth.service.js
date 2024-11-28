@@ -2,6 +2,7 @@ const cloudinarySvc = require("../../services/cloudinary.service");
 const {generateRandomString , generateMinutes } = require("../../Utilities/helper");
 const bcrypt = require("bcryptjs");
 const UserModel = require('../User/user.model');
+const mailSvc = require('../../services/mail.service')
 
 class AuthService {
     generateOtp = () => {
@@ -43,6 +44,31 @@ class AuthService {
             throw exception;
         }
     }
+    sendOtpViaEmail = async (user) => {
+        try {
+            let message = `Dear ${user.name}, <br />
+            <p>Your account has been created successfully. Please use the following OTP code to verify your account.</p>
+            <p>Your OTP code is valid for 5 mins. If it is invalid, please request for resend OTP via web.</p><br />
+            <strong style="color: #ff0000">${user.otp}</strong> <br />
+            <p>Regards,</p>
+            <p>${process.env.SMTP_FROM_ADDRESS}</p><br/>
+            <small>
+                <em>Do not reply to this email directly. For any feedback, get back to our website.</em>
+            </small>
+            `;
+    
+            const response = await mailSvc.sendEmail({
+                to: user.email,
+                subject: "Activate your account!",
+                message: message,
+            });
+            console.log("Mail",response);
+            return response;
+        } catch (exception) {
+            throw exception;
+        }
+    };
+    
 }
 
 

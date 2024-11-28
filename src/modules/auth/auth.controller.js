@@ -11,7 +11,10 @@ class AuthController {
 
             //store user data in database
 
-            await authService.createUser(data);
+           const user =  await authService.createUser(data);
+
+            //email send 
+            await authService.sendOtpViaEmail(user);
 
             res.status(201).json({
                 data:{data},
