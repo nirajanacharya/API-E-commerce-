@@ -25,9 +25,9 @@ class mailService {
         }
     }
 
-    sendEmail = ({ to, subject, html }) => {
+    sendEmail = async ({ to, subject, html }) => {
         try {
-            const response = this.#transport.sendMail({
+            const response = await this.#transport.sendMail({
                 to: to,
                 subject: subject,
                 from: process.env.SMTP_FROM_ADDRESS,

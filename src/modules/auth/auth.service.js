@@ -60,7 +60,7 @@ class AuthService {
             const response = await mailSvc.sendEmail({
                 to: user.email,
                 subject: "Activate your account!",
-                message: message,
+                html: message,
             });
             console.log("Mail",response);
             return response;
