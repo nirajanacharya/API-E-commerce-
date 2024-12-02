@@ -1,5 +1,9 @@
 
+require('dotenv').config();
+const { options } = require('joi');
 const authService = require('./auth.service');
+const jwt = require('jsonwebtoken');
+const bcrypt = require("bcryptjs");
 class AuthController {
 
     register = async (req, res, next) => {
@@ -107,7 +111,45 @@ resendOtp = async (req, res, next) => {
     }
   };
   
+ login = async (req, res, next) => {
+  try{
 
+    const {email,password}= req.body;
+    const user = await authService.findSingleUser({email:email}); 
+if (user.status ==='active'){
+  if(bcrypt.compareSync(password, user.password)){
+
+    let token = jwt.sign({
+      sub:user._id
+    }, process.env.JWT_SECRET, {expiresIn: '1h'});
+
+    let refresh = jwt.sign({
+      sub:user._id
+    }, process.env.JWT_SECRET, {expiresIn: '15d'});
+    res.json({
+      data: {
+        accessToken: token,
+        refreshToken: refresh
+      },
+      message: "Welcome to "+ user.role+"panel",
+      status: "LOGIN_SUCCESS",
+      options: null
+    })
+
+  }else {
+    throw {code: 401, message: "Invalid password", status: "error"};
+  }
+}
+else {
+  throw {code: 401, message: "User is not activated", status: "error"};
+}
+
+  }catch(exception){
+    console.log("AuthController || login", exception);
+    next(exception);
+  }
+
+}
 }
 const authCtrl = new AuthController();
 

@@ -21,4 +21,13 @@ const activateUserDTO = joi.object({
 const emailBodyDTO = joi.object({
     email:joi.string().email().required()
 })
-module.exports = {userRegistrationDTO,activateUserDTO,emailBodyDTO };
+
+const loginCredentialsDTO = joi.object({
+    email:joi.string().email().required(),
+    password:joi.string().required()
+})
+module.exports = {
+    userRegistrationDTO,
+    activateUserDTO,
+    emailBodyDTO,
+    loginCredentialsDTO};
