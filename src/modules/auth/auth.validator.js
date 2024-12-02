@@ -13,5 +13,21 @@ const userRegistrationDTO= joi.object({
     address:joi.string().required(),
     phone:joi.string().regex(/^(?:\+977[- ]?)?(?:98\d{8}|97\d{8}|0(?:1\d{7}|[2-9]\d{8}))$/)
 });
+const activateUserDTO = joi.object({
+    email:joi.string().email().required(),
+    otp:joi.string().min(2).max(6).required()
+})
 
-module.exports = userRegistrationDTO;
+const emailBodyDTO = joi.object({
+    email:joi.string().email().required()
+})
+
+const loginCredentialsDTO = joi.object({
+    email:joi.string().email().required(),
+    password:joi.string().required()
+})
+module.exports = {
+    userRegistrationDTO,
+    activateUserDTO,
+    emailBodyDTO,
+    loginCredentialsDTO};

@@ -1,5 +1,5 @@
 const cloudinarySvc = require("../../services/cloudinary.service");
-const {generateRandomString , generateMinutes } = require("../../Utilities/helper");
+const { generateRandomString, generateMinutes } = require("../../Utilities/helper");
 const bcrypt = require("bcryptjs");
 const UserModel = require('../User/user.model');
 const mailSvc = require('../../services/mail.service')
@@ -8,13 +8,13 @@ class AuthService {
     generateOtp = () => {
         return {
             otp: generateRandomString(6).toUpperCase(),
-            expiryOtp: generateMinutes(5)
+            expiryTime: generateMinutes(5)
         }
     }
 
     transformUserCreateData = async (req) => {
         try {
-            let data  = req.body;
+            let data = req.body;
 
             if (req.file) {
                 data.image = await cloudinarySvc.uploadImage(req.file.path, '/users');
@@ -26,6 +26,7 @@ class AuthService {
                 ...data,
                 ...this.generateOtp()
             };
+
             data.status = "inactive";
 
             let { confirmPassword, ...userData } = data;
@@ -38,11 +39,27 @@ class AuthService {
     createUser = async (data) => {
         try {
             const userObj = new UserModel(data);
-            const user =  await userObj.save();
+            const user = await userObj.save();
             return user;
         } catch (exception) {
             throw exception;
         }
+
+    }
+    findSingleUser = async (filter) => {
+        try {
+            let user = await UserModel.findOne(filter);
+            if (!user) {
+                throw ({ code: 400, message: "User not found", status: "error" });
+            }
+            else {
+                return user;
+            }
+        }
+        catch (exception) {
+            throw exception;
+        }
+
     }
     sendOtpViaEmail = async (user) => {
         try {
@@ -56,21 +73,29 @@ class AuthService {
                 <em>Do not reply to this email directly. For any feedback, get back to our website.</em>
             </small>
             `;
-    
+
             const response = await mailSvc.sendEmail({
                 to: user.email,
                 subject: "Activate your account!",
                 html: message,
             });
-            console.log("Mail",response);
+            console.log("Mail", response);
             return response;
         } catch (exception) {
             throw exception;
         }
     };
-    
-}
+    updateById = async (id, data) => {
+        try {
+            const update = await UserModel.findByIdAndUpdate(id,{$set:data},{new:true});    
+            return update;
 
+        } catch (exception) {
+            throw exception;
+        }
+
+    }
+}
 
 const authService = new AuthService();
 module.exports = authService;   
