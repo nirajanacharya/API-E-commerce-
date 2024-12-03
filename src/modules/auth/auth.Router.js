@@ -3,7 +3,7 @@ const authRouter = require('express').Router();
 const {uploader}=require('../../middleware/multipart.middleware');
 
 //check loggedin
-const checkLoggedIn = require('../../middleware/auth.middleware');
+const {checkLoggedIn} = require('../../middleware/auth.middleware');
 
 //controller
 const authCtrl = require ('../auth/auth.controller')
@@ -19,7 +19,7 @@ authRouter.post('/resend-otp',bodyValidator(emailBodyDTO), authCtrl.resendOtp);
 
 //log_in
 authRouter.post('/login', bodyValidator(loginCredentialsDTO),authCtrl.login);
-// authRouter.get('/me', checkLoggedIn);
+authRouter.get('/me', checkLoggedIn,authCtrl.getLoggedIn);
 
 
 module.exports = authRouter;    
