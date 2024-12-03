@@ -150,6 +150,22 @@ else {
   }
 
 }
+
+getLoggedIn= async(req,res,next)=>{
+try{
+
+  res.json({
+    data:req.LoggedInUser,
+    message:"Your profile",
+    status:"SUCCESS_OK",
+    options:null
+  })
+}catch(exception){
+  console.log('GetLoggedInuser',exception)
+  next(exception);
+}
+
+}
 }
 const authCtrl = new AuthController();
 
